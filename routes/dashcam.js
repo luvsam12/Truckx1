@@ -5,6 +5,7 @@ router.get('', (req,res) => {
     res.send("Hello Naman");
 })
 
+// Endpoint to creat a new entry for a new dashcam
 router.post('/new', (req,res) =>{
     let newCam = new Dashcam({
         IMEI: req.body.IMEI
@@ -22,6 +23,8 @@ router.post('/new', (req,res) =>{
 
 })
 
+
+// Endpoint to update the login time of a particular Dashcam
 router.post('', (req,res) => {
     Dashcam.findOne({IMEI: req.body.IMEI})
     .then((camera) => {
@@ -48,6 +51,9 @@ router.post('', (req,res) => {
 })
 })
 
+
+
+// Endpoint to update the location of a particular Dashcam
 router.post('/location', (req,res) => {
         let updated = {
             location_time: Date.now(),
@@ -72,6 +78,8 @@ router.post('/location', (req,res) => {
     })
 
 
+
+//Endpoint for the Moderator to send the commmand to a particular dashcam
 router.post("/command", (req,res) => {
     let command = {
         command: req.body.command

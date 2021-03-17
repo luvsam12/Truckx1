@@ -1,3 +1,6 @@
+// Schema for the alarms and video uploads
+
+
 const mongoose = require("mongoose");
 const alarmMessage = mongoose.Schema({
     type: {

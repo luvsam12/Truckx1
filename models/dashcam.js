@@ -1,3 +1,5 @@
+//Schema for the dashcam and location updates
+
 const mongoose = require("mongoose");
 
 const dashcam = mongoose.Schema({

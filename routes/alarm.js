@@ -3,7 +3,7 @@ const router = express.Router();
 const Alarm = require("./../models/alarm")
 const multer = require("multer")
 
-
+//to store the file in respective folder
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
         cb(null, './uploads');
@@ -15,6 +15,7 @@ const storage = multer.diskStorage({
 const upload = multer({storage: storage})
 
 
+// Endpoint to get only the alarms
 router.get('', (req,res) => {
     Alarm.find({type: "ALARM"})
     .sort({alarm_time: -1})
@@ -28,7 +29,7 @@ router.get('', (req,res) => {
     })
 })
 
-
+// Endpoint to get all the types of uploads 
 router.get('/alluploads', (req,res) => {
     Alarm.find()
     .sort({alarm_time: -1})
@@ -42,6 +43,8 @@ router.get('/alluploads', (req,res) => {
     })
 })
 
+
+// Endpoint to get a filtered result on the basis of start time and end time
 router.post('/filter', (req,res) => {
     Alarm.find()
     .then((result) => {
@@ -61,6 +64,8 @@ router.post('/filter', (req,res) => {
 })
 
 
+
+// Endpoint to post an alarm and upload the video corresponding to it.
 router.post('', upload.single('file_list') ,(req,res,next) => {
     console.log(req.file)
     const new_alarm = new Alarm({
@@ -85,6 +90,7 @@ router.post('', upload.single('file_list') ,(req,res,next) => {
 
 
 
+// endpoint to upload a video wrt a particular Dashcam.
 router.post('/upload', upload.single('file_list') ,(req,res,next) => {
     console.log(req.file)
     const new_alarm = new Alarm({
