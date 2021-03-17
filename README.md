@@ -23,4 +23,4 @@ routes - (contains all the endpoints that will be used to call a perticular serv
     1) Dashcam
     2) Alarm
     
-All the uploading arr to be done under routes/alarm.js
+All the uploading is done under routes/alarm.js
