@@ -1,0 +1,97 @@
+const express = require("express");
+const router = express.Router();
+const Dashcam = require("../models/dashcam");
+router.get('', (req,res) => {
+    res.send("Hello Naman");
+})
+
+router.post('/new', (req,res) =>{
+    let newCam = new Dashcam({
+        IMEI: req.body.IMEI
+    });
+
+    newCam.save()
+    .then(data => {
+        res.status(200)
+        .json({success: true, msg: "New Dashcam saved", data:data})
+    })
+    .catch((err) => {
+        res.status(400)
+        .json({success: false, msg:"Can't save new dashcam", err: err})
+    })
+
+})
+
+router.post('', (req,res) => {
+    Dashcam.findOne({IMEI: req.body.IMEI})
+    .then((camera) => {
+        let updated = {
+            IMEI: req.body.IMEI,
+            login: Date.now(),
+            location_time: Date.now()
+        }
+        Dashcam.updateOne({IMEI: req.body.IMEI}, updated)
+        .then((result) =>{
+            if(result.nModified === 0){
+                res.status(400)
+                .json({success:false, msg:"Can't update login", res: result})
+            }
+            else{
+            res.status(200)
+            .json({success: true, msg: "login updated", res: result})
+            }
+        })
+    })
+    .catch((err) => {
+        res.status(400)
+        .json({success: false, msg:"Can't update login", msg: err})
+})
+})
+
+router.post('/location', (req,res) => {
+        let updated = {
+            location_time: Date.now(),
+            latitude: req.body.latitude,
+            longitude: req.body.longitude
+        }
+        Dashcam.updateOne({IMEI: req.body.IMEI}, updated)
+        .then((data) => {
+            if(data.nModified === 0){
+                res.status(400)
+                .json({success: false, msg: "can't update location", err: data})
+            }
+            else{
+                res.status(200)
+                .json({success: true, msg: "location updated", data: data})
+            }
+        })
+        .catch(() => {
+            res.status(400)
+            .json({success: false, msg: "can't update location", err: data})
+        })
+    })
+
+
+router.post("/command", (req,res) => {
+    let command = {
+        command: req.body.command
+    }
+    Dashcam.updateOne({IMEI: req.body.IMEI}, command)
+    .then((res) => {
+        // console.log(res)
+        if(res.nModified === 0){
+            res.status(400)
+            .json({success: false, msg: "command not sent"})
+        }
+        else{
+            res.status(200)
+            .json({success: true, msg: "Commend sent"})
+        }
+    })
+    .catch(() => {
+        res.status(400)
+        .json({success: false, msg: "command not sent"})
+    })
+})
+
+module.exports = router;
